@@ -20,5 +20,12 @@ yarn build
 yarn lint
 ```
 
+### Technologies used in project
+```
+- Vuejs v3
+- Tailwind css
+- Firebase
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
