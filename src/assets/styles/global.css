@@ -2,6 +2,10 @@ body {
   @apply bg-dark-light font-Nunito text-base;
 }
 
+#app {
+  @apply max-w-[40rem] my-0 mx-auto;
+}
+
 @font-face {
   font-family: "t2ico";
   src: url("../fonts/t2ico.eot?84r94p");

@@ -1,80 +1,46 @@
 <template>
   <div class="mt-8">
     <div class="container mx-auto px-8">
-      <!-- Start: Form -->
-      <form
-        class="flex flex-col justify-start space-y-6"
-        @submit.prevent="onSubmit"
-      >
-        <div class="row">
-          <label class="flex flex-col" for="fullName">
-            <span class="font-semibold">Full Name</span>
-            <input
-              id="fullName"
-              class="px-4 py-3 rounded-lg border border-gray-100 mt-1"
-              type="text"
-              placeholder="iMoney"
-            />
-          </label>
-        </div>
-        <div class="row">
-          <label class="flex flex-col" for="emailAddress">
-            <span class="font-semibold">Email Address</span>
-            <input
-              id="emailAddress"
-              class="px-4 py-3 rounded-lg border border-gray-100 mt-1"
-              type="email"
-              placeholder="example@example.com"
-              autocomplete="username"
-            />
-          </label>
-        </div>
-        <div class="row">
-          <label class="flex flex-col" for="password">
-            <span class="font-semibold">Password</span>
-            <input
-              id="password"
-              class="px-4 py-3 rounded-lg border border-gray-100 mt-1"
-              type="password"
-              placeholder="Password"
-              autocomplete="current-password"
-            />
-          </label>
-        </div>
-        <div class="row">
-          <button
-            class="w-full py-3 text-center bg-primary text-white font-bold rounded-lg"
-            type="submit"
-          >
-            Sign Up
-          </button>
-        </div>
-      </form>
-      <!-- End: Form -->
+      <auth-form v-model="user" :isSignUp="true" @submitForm="onSubmit" />
 
-      <!-- Start: Direction -->
-      <div class="w-full text-center mt-6">
-        <span class="font-semibold">I'm ready a member.</span>
-        <span class="ml-1">
-          <router-link
-            :to="{ name: ROUTE_NAME.LOGIN, params: {} }"
-            class="text-primary font-bold"
-            >Sign In</router-link
-          >
-        </span>
-      </div>
-      <!-- End: Direction -->
+      <auth-direct-btn
+        :msg="`I'm ready a member.`"
+        :route="ROUTE_NAME.LOGIN"
+        title="Sign In"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import { reactive } from "vue";
+import { useRouter } from "vue-router";
+
+import AuthForm from "@/components/auth/AuthForm.vue";
+import AuthDirectBtn from "@/components/auth/AuthDirectBtn.vue";
 import { ROUTE_NAME } from "@/consts/route.const";
+import { useAuth } from "@/composables/useAuth";
+
 export default {
+  components: { AuthForm, AuthDirectBtn },
   setup() {
-    console.log("ROUTE_NAME", ROUTE_NAME.LOGIN);
-    function onSubmit() {}
-    return { ROUTE_NAME, onSubmit };
+    const router = useRouter();
+    const { error, signUp } = useAuth();
+
+    const user = reactive({
+      fullName: "",
+      email: "",
+      password: "",
+    });
+
+    async function onSubmit() {
+      if (user.email && user.password && user.fullName) {
+        await signUp(user.email, user.password, user.fullName);
+        if (!error.value) router.push({ name: ROUTE_NAME.HOME, params: {} });
+      }
+    }
+
+    return { ROUTE_NAME, user, onSubmit };
   },
 };
 </script>
