@@ -6,8 +6,6 @@
 import { useRouter } from "vue-router";
 import { useAuth } from "@/composables/useAuth";
 import { ROUTE_NAME } from "@/consts/route.const";
-import { userLocalStorage } from "@/composables/useLocalStorage";
-import { LOCAL_STORAGE } from "@/consts/local_storage.const";
 
 export default {
   setup() {
@@ -17,7 +15,6 @@ export default {
     async function logOut() {
       await signOut();
       if (!error.value) {
-        userLocalStorage().removeItem(LOCAL_STORAGE.USER);
         router.push({ name: ROUTE_NAME.LOGIN, params: {} });
       }
     }

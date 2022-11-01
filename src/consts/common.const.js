@@ -15,6 +15,10 @@ export const ICON_NAME = {
   USERS: "t2ico-users",
   NOTIFICATION: "t2ico-notification",
   SETTING: "t2ico-setting",
+  DOCUMENT: "t2ico-document",
+  CALENDAR: "t2ico-calendar",
+  LOCATION: "t2ico-location",
+  CAMERA: "t2ico-camera",
 };
 
 export const PROFILE_OPTION_ITEMS = [
