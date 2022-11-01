@@ -1,9 +1,9 @@
 <template>
   <div class="mt-8">
     <div class="container mx-auto px-8">
-      <auth-form v-model="user" :isSignUp="true" @submitForm="onSubmit" />
+      <AuthForm v-model="user" :isSignUp="true" @submitForm="onSubmit" />
 
-      <auth-direct-btn
+      <AuthDirectBtn
         :msg="`I'm ready a member.`"
         :route="ROUTE_NAME.LOGIN"
         title="Sign In"
@@ -36,7 +36,7 @@ export default {
     async function onSubmit() {
       if (user.email && user.password && user.fullName) {
         await signUp(user.email, user.password, user.fullName);
-        if (!error.value) router.push({ name: ROUTE_NAME.HOME, params: {} });
+        if (!error.value) router.push({ name: ROUTE_NAME.PROFILE, params: {} });
       }
     }
 

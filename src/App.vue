@@ -12,6 +12,7 @@ import { ROUTE_LAYOUT } from "@/consts/route.const";
 export default {
   setup() {
     const route = useRoute();
+
     return {
       route,
       layout: computed(

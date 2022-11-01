@@ -34,7 +34,6 @@ const login = (email, password) => {
 };
 
 const logout = () => {
-  console.log("1");
   return signOut(auth);
 };
 

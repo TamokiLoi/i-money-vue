@@ -7,10 +7,20 @@ export const ROUTE_LINK = {
   HOME: "/",
   LOGIN: "/login",
   REGISTER: "/register",
+  LOGOUT: "/logout",
+  PROFILE: "/profile",
+  REPORT: "/report",
+  BUDGET: "/budget",
+  TRANSACTION: "/transaction",
 };
 
 export const ROUTE_NAME = {
-  HOME: "home-route",
-  LOGIN: "login-route",
-  REGISTER: "register-route",
+  HOME: "home",
+  LOGIN: "login",
+  REGISTER: "register",
+  LOGOUT: "logout",
+  PROFILE: "profile",
+  REPORT: "report",
+  BUDGET: "budget",
+  TRANSACTION: "transaction",
 };
