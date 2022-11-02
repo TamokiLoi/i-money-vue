@@ -131,7 +131,7 @@
               </label>
             </div>
             <div class="row">
-              <label for="withPerson" class="flex items-center">
+              <label for="person" class="flex items-center">
                 <div class="flex-none w-10 mr-4">
                   <span class="flex items-center justify-end text-dark">
                     <IconRender :icon="ICON_NAME.USERS" />
@@ -139,7 +139,8 @@
                 </div>
                 <div class="flex-1 py-2">
                   <input
-                    id="withPerson"
+                    id="person"
+                    v-model="transaction.person"
                     class="text-dark w-full outline-none"
                     type="text"
                     placeholder="With person"
@@ -150,11 +151,16 @@
           </div>
         </div>
       </div>
+
+      <!-- Start: Upload photos -->
       <div class="row mt-8">
         <div class="bg-white rounded-lg py-4">
           <div class="container mx-auto px-8">
             <div class="row">
-              <label for="avatar" class="flex items-center text-primary">
+              <label
+                for="file"
+                class="flex items-center text-primary cursor-pointer"
+              >
                 <div class="flex-none w-10 mr-4">
                   <span class="flex items-center justify-end">
                     <IconRender :icon="ICON_NAME.CAMERA" />
@@ -162,12 +168,23 @@
                 </div>
                 <div class="flex-1 py-2">
                   <div class="w-full font-semibold">Upload photos</div>
+                  <input
+                    id="file"
+                    type="file"
+                    accept="image/*"
+                    class="w-0 h-0 overflow-hidden absolute"
+                    @change="onChangeFile"
+                  />
                 </div>
               </label>
             </div>
           </div>
         </div>
+        <div class="text-red my-3 px-8">
+          {{ errorSelectedFile }}
+        </div>
       </div>
+      <!-- End: Upload photos -->
     </template>
     <!-- End: Advanced Form -->
 
@@ -180,6 +197,7 @@ import { ref } from "vue";
 
 import { useUser } from "@/composables/useUser";
 import useCollection from "@/composables/useCollection";
+import useStorage from "@/composables/useStorage";
 import { ICON_NAME } from "@/consts/common.const";
 import IconRender from "@/components/IconRender.vue";
 
@@ -188,18 +206,36 @@ export default {
   setup() {
     const { user } = useUser();
     const { error, addRecord } = useCollection("transactions");
+    const { uploadFile } = useStorage("transactions");
     const isAdvancedForm = ref(false);
+    const errorSelectedFile = ref(null);
+    const file = ref(null);
     const transaction = ref({
       userId: user?.value?.uid || "",
       total: 0,
       category: "",
       note: "",
       time: new Date(),
+      image: null,
       location: "",
-      avatar: "",
+      person: "",
     });
 
+    async function onChangeFile(event) {
+      const selectedFile = event.target.files[0];
+      if (selectedFile) {
+        transaction.value.image = selectedFile;
+        file.value = selectedFile;
+      } else {
+        file.value = null;
+        errorSelectedFile.value = "Please select a file type image.";
+      }
+    }
+
     async function onSubmit() {
+      if (file.value) {
+        transaction.value.image = await uploadFile(file.value);
+      }
       transaction.value.total = parseInt(transaction.value.total);
       const body = Object.assign({}, transaction.value);
       const res = await addRecord(body);
@@ -208,10 +244,12 @@ export default {
 
     return {
       ICON_NAME,
+      error,
+      errorSelectedFile,
       isAdvancedForm,
       transaction,
+      onChangeFile,
       onSubmit,
-      error,
     };
   },
 };

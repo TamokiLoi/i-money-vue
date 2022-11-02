@@ -14,6 +14,7 @@ import {
   getFirestore,
   query,
 } from "firebase/firestore";
+import { getStorage, ref } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDk7AczKAyBcYs_MY_LvRJfyklQFzJthfE",
@@ -28,6 +29,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore(app);
+const storage = getStorage();
+
+const storageRef = (filePath) => {
+  return ref(storage, filePath.value.toString());
+};
 
 const login = (email, password) => {
   return signInWithEmailAndPassword(auth, email, password);
@@ -66,6 +72,8 @@ const getTransaction = async (transactionId = "") => {
 export {
   auth,
   db,
+  storage,
+  storageRef,
   login,
   logout,
   createUser,
